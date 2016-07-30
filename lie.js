@@ -30,12 +30,13 @@ function lie(keys) {
             pin: 'A4',
             freq: 250
         });
+        var led = new five.Led('A5');
+
         photoresistor.on('data', function onLight(data) {
-            console.log(data);
+            cb({light: data});
         });
 
       weather.on('data', function () {
-        const led = new five.Led('A5');
         const wetdata = {
           celsius: this.celsius,
           fahrenheit: this.fahrenheit,
