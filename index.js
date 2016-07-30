@@ -17,7 +17,7 @@ app.use(function *(next){
     this.set('x-' + pkg.name + '-version', pkg.version);
     yield next;
     var ms = new Date - start;
-    console.log('%s %s - %sms', this.method, this.url, ms);
+  // console.log('%s %s - %sms', this.method, this.url, ms);
 });
 
 app.listen(port);
