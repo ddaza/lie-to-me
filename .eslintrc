@@ -7,4 +7,7 @@
     "rules": {
       "quotes": [2, "single", "avoid-escape"]
     }
+    "globals": {
+        "d3": true
+    }
 }
