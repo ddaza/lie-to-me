@@ -14,6 +14,10 @@
     "eslint": "^3.2.0",
     "j5-sparkfun-weather-shield": "^0.2.0",
     "johnny-five": "^0.9.61",
+    "koa-compress": "^1.0.9",
+    "koa-route": "^2.4.2",
+    "koa-static-cache": "^3.1.7",
+    "koa.io": "0.0.3",
     "particle-io": "^0.12.0"
   }
 }
