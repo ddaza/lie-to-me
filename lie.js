@@ -4,6 +4,8 @@ const particle = require('particle-io');
 const Shield = require('j5-sparkfun-weather-shield')(five);
 
 let board;
+let lastTemp = 0;
+let tempDiff = 0;
 
 function lie(keys) {
   function init() {
@@ -16,24 +18,25 @@ function lie(keys) {
     console.log('Board connected...');
   }
 
-  function start() {
+  function start(cb) {
     board.on('ready', function() {
-      const weather = new Shield({
-        variant: 'PHOTON',  // or ARDUINO
-        freq: 3000,         // Set the callback frequency to 1-second
-        elevation: 500      // Go to http://www.WhatIsMyElevation.com to get your current elevation
-      });
+        console.log('board ready');
+        const weather = new Shield({
+            variant: 'PHOTON',  // or ARDUINO
+            freq: 250,          // Set the callback frequency to 1-second
+            elevation: 582      // Go to http://www.WhatIsMyElevation.com to get your current elevation
+        });
+        const photoresistor = new five.Sensor({
+            pin: 'A4',
+            freq: 250
+        });
+        photoresistor.on('data', function onLight(data) {
+            console.log(data);
+        });
 
-      // The weather.on("data", callback) function invokes the anonymous callback function
-      // whenever the data from the sensor changes (no faster than every 25ms). The anonymous
-      // function is scoped to the object (e.g. this == the instance of Weather class object).
-      // setTimeout(
       weather.on('data', function () {
-        const led = new five.Led("A5");
+        const led = new five.Led('A5');
         const wetdata = {
-          deviceId: board.io.deviceId,
-          location: '1871',
-          // celsius & fahrenheit are averages taken from both sensors on the shield
           celsius: this.celsius,
           fahrenheit: this.fahrenheit,
           relativeHumidity: this.relativeHumidity,
@@ -43,11 +46,14 @@ function lie(keys) {
         };
 
         console.log(wetdata);
-        if(wetdata.relativeHumidity > 40) {
-            led.fadeIn();
+        tempDiff =  wetdata.celsius - lastTemp;
+        if (tempDiff > 0.01) {
+            led.on(1);
         } else {
-            led.fadeOut();
+            led.off(1);
         }
+        lastTemp = wetdata.celsius;
+        cb(wetdata);
       })
     });
   }
