@@ -27,9 +27,9 @@ function lie(keys) {
       // The weather.on("data", callback) function invokes the anonymous callback function
       // whenever the data from the sensor changes (no faster than every 25ms). The anonymous
       // function is scoped to the object (e.g. this == the instance of Weather class object).
+      // setTimeout(
       weather.on('data', function () {
-        console.log('Data...');
-        const led = new five.Led('D7');
+        const led = new five.Led("A5");
         const wetdata = {
           deviceId: board.io.deviceId,
           location: '1871',
@@ -44,7 +44,9 @@ function lie(keys) {
 
         console.log(wetdata);
         if(wetdata.relativeHumidity > 40) {
-          led.blink();
+            led.fadeIn();
+        } else {
+            led.fadeOut();
         }
       })
     });
