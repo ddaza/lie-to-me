@@ -21,7 +21,7 @@ function lie(keys) {
         console.log('board ready');
         const weather = new Shield({
             variant: 'PHOTON',  // or ARDUINO
-            freq: 3000,         // Set the callback frequency to 1-second
+            freq: 250,          // Set the callback frequency to 1-second
             elevation: 500      // Go to http://www.WhatIsMyElevation.com to get your current elevation
         });
         const led = new five.Led('A5');
