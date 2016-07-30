@@ -4,6 +4,8 @@ const particle = require('particle-io');
 const Shield = require('j5-sparkfun-weather-shield')(five);
 
 let board;
+let lastTemp = 0;
+let tempDiff = 0;
 
 function lie(keys) {
   function init() {
@@ -22,9 +24,8 @@ function lie(keys) {
         const weather = new Shield({
             variant: 'PHOTON',  // or ARDUINO
             freq: 250,          // Set the callback frequency to 1-second
-            elevation: 500      // Go to http://www.WhatIsMyElevation.com to get your current elevation
+            elevation: 582      // Go to http://www.WhatIsMyElevation.com to get your current elevation
         });
-        const led = new five.Led('A5');
         const photoresistor = new five.Sensor({
             pin: 'A4',
             freq: 250
@@ -34,9 +35,8 @@ function lie(keys) {
         });
 
       weather.on('data', function () {
+        const led = new five.Led('A5');
         const wetdata = {
-          deviceId: board.io.deviceId,
-          location: '1871',
           celsius: this.celsius,
           fahrenheit: this.fahrenheit,
           relativeHumidity: this.relativeHumidity,
@@ -46,11 +46,13 @@ function lie(keys) {
         };
 
         console.log(wetdata);
-        if (wetdata.relativeHumidity > 40) {
-            led.fadeIn();
+        tempDiff =  wetdata.celsius - lastTemp;
+        if (tempDiff > 0.01) {
+            led.on(1);
         } else {
-            led.fadeOut();
+            led.off(1);
         }
+        lastTemp = wetdata.celsius;
         cb(wetdata);
       })
     });
