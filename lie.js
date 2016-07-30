@@ -16,7 +16,7 @@ function lie(keys) {
     console.log('Board connected...');
   }
 
-  function start() {
+  function start(cb) {
     board.on('ready', function() {
       const weather = new Shield({
         variant: 'PHOTON',  // or ARDUINO
@@ -48,6 +48,7 @@ function lie(keys) {
         } else {
             led.fadeOut();
         }
+        cb(wetdata);
       })
     });
   }

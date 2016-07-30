@@ -1,14 +1,13 @@
 'use strict';
-const keys = require('./keys.json'); // need to add your keys
-const lie = require('./lie.js')(keys);
 var koa         = require('koa.io'),
     compress    = require('koa-compress'),
     route       = require('koa-route'),
     staticCache = require('koa-static-cache'),
     path        = require('path'),
-    app         = koa(),
+    io          = require('./io'),
     pkg         = require('./package'),
-    port        = process.env.PORT || process.env.NODE_PORT || 3001;
+    port        = process.env.PORT || process.env.NODE_PORT || 3001,
+    app         = koa();
 
 app.use(compress());
 app.use(staticCache(path.join(__dirname, 'public')));
@@ -22,9 +21,5 @@ app.use(function *(next){
 });
 
 app.listen(port);
-(function () {
-  lie.init();
-  lie.start();
-})()
-
+io(app);
 console.info('listening on', port);
