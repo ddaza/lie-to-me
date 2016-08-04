@@ -11,7 +11,7 @@ socket.on('celsius', function (value) {
   }
 });
 
-socket.on('light', function (value) {
+socket.on('relativeHumidity', function (value) {
   light.push(value);
 
   if (light.length > n) {
@@ -72,7 +72,7 @@ g.append('g')
 // Sencond line
 
 var y1 = d3.scaleLinear()
-  .domain([0, 255])
+  .domain([-75, 75])
   .range([height, 0]);
 
 var line1 = d3.line()
